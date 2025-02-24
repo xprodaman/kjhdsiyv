@@ -1,31 +1,26 @@
-name: Create Text File After 15 Minutes
+name: Crear archivo .txt después de 15 minutos
 
 on:
   schedule:
     - cron: '*/15 * * * *'  # Ejecutar cada 15 minutos
 
 jobs:
-  create_file:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Wait for 15 minutes
+      - name: Crear archivo .txt
         run: |
-          echo "Esperando 15 minutos..."
-          sleep 900  # Pausa de 15 minutos (900 segundos)
-      
-      - name: Create text file after 15 minutes
-        run: |
-          echo "Este archivo se crea después de 15 minutos" > file_created_$(date +'%Y%m%d%H%M%S').txt
-          echo "Archivo creado a las $(date)"  # Imprime la hora exacta
+          CURRENT_TIME=$(date +%Y%m%d%H%M%S)
+          echo "Archivo creado a las $CURRENT_TIME" > "file_created_${CURRENT_TIME}.txt"
 
-      - name: Commit and push text file
+      - name: Commit and push the file
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add file_created_*.txt
+          git add "file_created_${CURRENT_TIME}.txt"
           git commit -m "Crear archivo .txt después de 15 minutos"
-          git push
+          git push https://xprodaman:${{ secrets.GITHUB_TOKEN }}@github.com/xprodaman/kjhdsiyv.git
